@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>delineate | Dependency Resolver</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+    <canvas id="graph-canvas"></canvas>
+    <div class="ambient-glow"></div>
+
+    <nav class="top-nav">
+        <div class="logo-container">
+            <img src="images/logo.jpg" alt="delineate logo" class="logo-img">
+            <span class="logo-text">delineate</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#" class="nav-item active">
+                <i class="ph-bold ph-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="dashboard.html" class="nav-item">
+                <i class="ph-bold ph-chart-bar"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="how-it-works.html" class="nav-item">
+                <i class="ph-bold ph-question"></i>
+                <span>How It Works</span>
+            </a>
+            <a href="contact.html" class="nav-item">
+                <i class="ph-bold ph-phone"></i>
+                <span>Contact</span>
+            </a>
+            <a href="feedback.html" class="nav-item">
+                <i class="ph-bold ph-chat-centered-text"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content centered">
+            <h1>Lets deflect <br> <span class="text-gradient">dependency hell.</span></h1>
+            <p>
+                Explore and analyze NPM package dependencies with interactive graphs. <br> 
+                Understand dependencies ike never before.
+            </p>
+            
+            <div class="cta-group">
+                <a href="dashboard.html" class="btn-primary large">Get Started &rarr;</a>
+            </div>
+
+            <div class="feature-stack">
+                
+                <div class="feature-card">
+                    <div class="card-glow-line"></div>
+                    <div class="icon-bubble">
+                        <i class="ph-fill ph-magnifying-glass"></i>
+                    </div>
+                    <div class="card-text">
+                        <h3>Deep Search</h3>
+                        <p>Instantly retrieve comprehensive dependency info from Neo4j.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="card-glow-line"></div>
+                    <div class="icon-bubble">
+                        <i class="ph-fill ph-graph"></i>
+                    </div>
+                    <div class="card-text">
+                        <h3>Visual Graph</h3>
+                        <p>Force-directed graphs that bring your tree to life.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="card-glow-line"></div>
+                    <div class="icon-bubble">
+                        <i class="ph-fill ph-shield-check"></i>
+                    </div>
+                    <div class="card-text">
+                        <h3>ML Compatibility</h3>
+                        <p>Predict stack health with our trained AI models.</p>
+                    </div>
+                </div>
+                
+                </div>
+                </div>
+    </header>
+
+    <script src="front_js/bg-animation.js"></script>
+</body>
+</html>

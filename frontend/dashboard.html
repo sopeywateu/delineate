@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | delineate</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/vis-network@9.1.2/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+
+    <canvas id="graph-canvas"></canvas>
+    <div class="ambient-glow"></div>
+
+    <nav class="top-nav">
+        <div class="logo-container">
+            <img src="images/logo.jpg" alt="delineate logo" class="logo-img">
+            <span class="logo-text">delineate</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">
+                <i class="ph-bold ph-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="dashboard.html" class="nav-item active">
+                <i class="ph-bold ph-chart-bar"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="how-it-works.html" class="nav-item">
+                <i class="ph-bold ph-question"></i>
+                <span>How It Works</span>
+            </a>
+            <a href="contact.html" class="nav-item">
+                <i class="ph-bold ph-phone"></i>
+                <span>Contact</span>
+            </a>
+            <a href="feedback.html" class="nav-item">
+                <i class="ph-bold ph-chat-centered-text"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content centered">
+            <h1>Analyze a <span class="text-gradient">Libary</span></h1>
+            <p>
+                Enter a package name and select the package manager to explore its dependency graph.
+            </p>
+            
+            <div class="dashboard-form">
+                <div class="form-group">
+                    <label for="package-name">Package Name</label>
+                    <input type="text" id="package-name" placeholder="e.g., express">
+                </div>
+                <div class="form-group">
+                    <label for="package-manager">Package Manager</label>
+                    <select id="package-manager">
+                        <option value="npm">npm</option>
+                        <option value="pypi">pypi</option>
+                    </select>
+                </div>
+                <button class="btn-primary large" id="analyze-btn">Analyze &rarr;</button>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <div id="results" class="results hidden">
+                <h2>Analysis Results for <span id="package-name-display"></span></h2>
+                <div id="version-dropdown-container"></div>
+                
+                <div class="view-toggle">
+                    <button id="table-toggle" class="toggle-btn active">Table View</button>
+                    <button id="graph-toggle" class="toggle-btn">Graph View</button>
+                </div>
+                
+                <div id="tableView" class="view-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Direct Dependencies</h3>
+                            <p id="direct-deps-count">-</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Used By</h3>
+                            <p id="used-by-count">-</p>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <h3>Dependencies</h3>
+                        <table id="dependencies-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Specifier</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dependencies-tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-container">
+                        <h3>Dependents</h3>
+                        <table id="dependents-table">
+                            <thead>
+                                <tr>
+                                    <th>Package</th>
+                                    <th>Version</th>
+                                    <th>Specifier</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dependents-tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="graphView" class="view-content hidden">
+                    <div class="graph-controls">
+                        <div class="nav-controls">
+                            <button id="back-btn" class="btn-secondary small" disabled>
+                                <i class="ph-bold ph-arrow-left"></i>
+                                Back
+                            </button>
+                        </div>
+                        <div class="search-group">
+                            <input type="text" id="graph-search" placeholder="Search packages in graph..." class="graph-search-input">
+                            <button id="search-btn" class="btn-secondary small">
+                                <i class="ph-bold ph-magnifying-glass"></i>
+                            </button>
+                        </div>
+                        <div class="graph-actions">
+                            <button id="fit-btn" class="btn-secondary small">Fit to Screen</button>
+                            <button id="reset-btn" class="btn-secondary small">Reset View</button>
+                        </div>
+                    </div>
+                    <div id="graph-container"></div>
+                </div>
+            </div>
+
+            <!-- Glassmorphism Side Panel -->
+            <div id="side-panel" class="side-panel hidden">
+                <div class="panel-header">
+                    <h3>Package Details</h3>
+                    <button id="close-panel" class="close-btn">&times;</button>
+                </div>
+                <div class="panel-content">
+                    <div class="detail-item">
+                        <strong>Type:</strong> <span id="panel-type"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Name:</strong> <span id="panel-name"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Version:</strong> <span id="panel-version"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Description:</strong> <span id="panel-description">No description available</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>License:</strong> <span id="panel-license">Unknown</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script src="front_js/bg-animation.js"></script>
+    <script src="front_js/dashboard.js"></script>
+</body>
+</html>

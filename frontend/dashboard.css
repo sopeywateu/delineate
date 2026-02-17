@@ -1,0 +1,477 @@
+/* Dashboard specific styles */
+
+.dashboard-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 2px rgba(200, 59, 16, 0.2);
+}
+
+.message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.message.hidden {
+    display: none;
+}
+
+.message.info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
+}
+
+.message.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fbbf24;
+}
+
+.message.info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
+}
+
+.results {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    max-width: 600px;
+}
+
+.results h2 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.results h3 {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.results ul {
+    list-style: none;
+    padding: 0;
+}
+
+.results li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.results li:last-child {
+    border-bottom: none;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.toggle-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+    background: var(--accent-orange);
+    color: white;
+    border-color: var(--accent-orange);
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.view-content {
+    transition: opacity 0.3s ease;
+}
+
+.view-content.hidden {
+    display: none;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.table-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.table-container h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+#dependencies-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-primary);
+}
+
+#dependencies-table th,
+#dependencies-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#dependencies-table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+#graph-container {
+    height: 500px;
+    background: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Graph Controls - Minimalist Design */
+.graph-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.nav-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-controls .btn-secondary.small {
+    padding: 0.75rem 1rem;
+}
+
+.nav-controls .btn-secondary.small:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.nav-controls .btn-secondary.small:disabled:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.search-group {
+    display: flex;
+    gap: 0;
+    align-items: center;
+    position: relative;
+}
+
+.graph-search-input {
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    min-width: 250px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.graph-search-input:focus {
+    outline: none;
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 2px rgba(200, 59, 16, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.02);
+}
+
+.graph-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#search-btn {
+    position: absolute;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--accent-orange);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+#search-btn:hover {
+    background: rgba(200, 59, 16, 0.1);
+    color: #c83b10;
+    transform: scale(1.1);
+}
+
+.graph-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-secondary.small {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-weight: 500;
+}
+
+.btn-secondary.small:hover {
+    background: rgba(200, 59, 16, 0.1);
+    border-color: var(--accent-orange);
+    color: #c83b10;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(200, 59, 16, 0.2);
+}
+
+.btn-secondary.small:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(200, 59, 16, 0.1);
+}
+
+/* Vis.js Network Custom Styles */
+.vis-network {
+    background: transparent !important;
+}
+
+.vis-network:focus {
+    outline: none;
+}
+
+/* Custom hover effect for nodes */
+.vis-network .vis-node:hover {
+    stroke: #c83b10 !important;
+    stroke-width: 3px !important;
+}
+
+/* Navigation controls styling - Fixed visibility */
+.vis-navigation {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 1. Reset the background image so standard sprites don't interfere */
+.vis-navigation .vis-button {
+    background-image: none !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px !important; /* Adjust icon size */
+    font-family: sans-serif; /* Ensure standard font for arrows */
+}
+
+/* 2. Inject icons using pseudo-elements */
+
+/* UP Arrow */
+.vis-button.vis-up::after {
+    content: "▲"; /* Or use "\25B2" */
+}
+
+/* DOWN Arrow */
+.vis-button.vis-down::after {
+    content: "▼"; /* Or use "\25BC" */
+}
+
+/* LEFT Arrow */
+.vis-button.vis-left::after {
+    content: "◀"; /* Or use "\25C0" */
+}
+
+/* RIGHT Arrow */
+.vis-button.vis-right::after {
+    content: "▶"; /* Or use "\25B6" */
+}
+
+/* ZOOM IN (+) */
+.vis-button.vis-zoomIn::after {
+    content: "+";
+    font-weight: bold;
+    font-size: 22px;
+}
+
+/* ZOOM OUT (-) */
+.vis-button.vis-zoomOut::after {
+    content: "−"; /* True minus sign */
+    font-weight: bold;
+    font-size: 22px;
+}
+
+/* CENTER / FIT (The dot in the middle of arrows) */
+.vis-button.vis-zoomExtends::after {
+    content: "⤢"; 
+    font-size: 16px;
+}
+
+/* Glassmorphism Side Panel */
+.side-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 350px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    color: white;
+    overflow-y: auto;
+}
+
+.side-panel:not(.hidden) {
+    right: 0;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.close-btn:hover {
+    background: rgba(200, 59, 16, 0.2);
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    transform: scale(1.1);
+}
+
+.panel-content {
+    padding: 20px;
+}
+
+.detail-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.detail-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #c83b10;
+}

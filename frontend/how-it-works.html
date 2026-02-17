@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | Delineate</title>
+    <link rel="stylesheet" href="how-it-works.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+    <canvas id="graph-canvas"></canvas>
+    <div class="ambient-glow"></div>
+
+    <nav class="top-nav">
+        <div class="logo-container">
+            <img src="images/logo.jpg" alt="delineate logo" class="logo-img">
+            <span class="logo-text">delineate</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">
+                <i class="ph-bold ph-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="dashboard.html" class="nav-item">
+                <i class="ph-bold ph-chart-bar"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="how-it-works.html" class="nav-item active">
+                <i class="ph-bold ph-question"></i>
+                <span>How It Works</span>
+            </a>
+            <a href="contact.html" class="nav-item">
+                <i class="ph-bold ph-phone"></i>
+                <span>Contact</span>
+            </a>
+            <a href="feedback.html" class="nav-item">
+                <i class="ph-bold ph-chat-centered-text"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="page-wrap">
+        <header class="hero">
+            <div class="hero-content centered">
+                <h1>How It Works</h1>
+                <p class="sub">Understanding dependency visualization with Delineate</p>
+            </div>
+        </header>
+
+        <section class="flow-section">
+            <canvas class="flow-canvas" id="flowCanvas"></canvas>
+            
+            <div class="flow-container">
+                <!-- Step 1: Left aligned -->
+                <div class="flow-step step-1">
+                    <div class="step-number">01</div>
+                    <div class="icon-bubble">
+                        <i class="ph-fill ph-database"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Graph Database Storage</h3>
+                        <p>We use Neo4j, a powerful graph database, to store package information and relationships. Each package is represented as a node with properties like name, ecosystem, and description. Versions are stored as separate nodes, connected to their parent package through HAS_VERSION relationships.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Right aligned -->
+                <div class="flow-step step-2">
+                    <div class="step-number">02</div>
+                    <div class="icon-bubble">
+                        <i class="ph-fill ph-magnifying-glass"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Package Search</h3>
+                        <p>When you search for a package, we query the Neo4j database to retrieve the package node and all its related version nodes. We also follow DEPENDS_ON relationships to gather information about dependencies, creating a complete picture of the package ecosystem.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Left aligned -->
+                <div class="flow-step step-3">
+                    <div class="step-number">03</div>
+                    <div class="icon-bubble">
+                        <i class="ph-fill ph-graph"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Graph Construction</h3>
+                        <p>The data retrieved from Neo4j is transformed into a graph structure with nodes and links. Packages, versions, and dependencies are represented as nodes with different colors, while relationships between them are shown as connecting links in the visualization.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4: Right aligned -->
+                <div class="flow-step step-4">
+                    <div class="step-number">04</div>
+                    <div class="icon-bubble">
+                        <i class="ph-fill ph-eye"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Interactive Visualization</h3>
+                        <p>The graph is rendered using a force-directed layout algorithm that positions nodes based on their relationships. You can interact with the graph by dragging nodes, zooming in and out, and hovering over nodes to see detailed information. The visual representation makes it easy to understand complex dependency chains at a glance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="cta-card">
+                <h2>Ready to explore?</h2>
+                <p>Start visualizing package dependencies and gain insights into your project's ecosystem</p>
+                <a href="dashboard.html" class="btn-primary large">Go to Dashboard</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="front_js/bg-animation.js"></script>
+    <script src="front_js/flow-chart.js"></script>
+</body>
+</html>

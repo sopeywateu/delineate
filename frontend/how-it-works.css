@@ -1,0 +1,413 @@
+:root {
+    --bg-color: #050505;
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --accent-orange: #c83b10;
+    --accent-glow: #632109;
+    --nav-bg: rgba(10, 10, 10, 0.8);
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --font-main: 'Outfit', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* --- Background Layers --- */
+#graph-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    opacity: 0.6;
+}
+
+.ambient-glow {
+    position: fixed;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(255, 69, 0, 0.15) 0%, transparent 70%);
+    filter: blur(80px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* --- Navigation Bar --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.logo-text {
+    background: linear-gradient(135deg, var(--accent-orange) 0%, #ff6b35 50%, #ff8c42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 10px rgba(200, 59, 16, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.logo-text::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-orange), #ff6b35);
+    border-radius: 1px;
+    opacity: 0.8;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.logo-container:hover .logo-text::after {
+    transform: scaleX(1);
+}
+
+.logo-container:hover .logo-text {
+    text-shadow: 0 4px 20px rgba(200, 59, 16, 0.5);
+    transform: translateY(-1px);
+}
+
+.logo-img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(200, 59, 16, 0.2);
+    transition: all 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(200, 59, 16, 0.4);
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.nav-item.active {
+    background-color: var(--accent-orange);
+    color: white;
+}
+
+.nav-item:not(.active):hover {
+    color: white;
+}
+
+.nav-links .nav-item i {
+    font-size: 1.25rem;
+    color: inherit;
+    display: inline-block;
+    transition: color 0.25s ease, text-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.nav-links .nav-item:hover i {
+    color: var(--accent-orange);
+    text-shadow: 0 6px 18px rgba(200, 59, 16, 0.45);
+    transform: translateY(-2px);
+}
+
+/* --- Hero Section --- */
+.hero {
+    padding-top: 140px;
+    padding-bottom: 3rem;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3.2rem;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.sub {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* --- Flow Section --- */
+.flow-section {
+    position: relative;
+    padding: 3rem 5% 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.flow-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.flow-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+/* Flow steps with alternating left-right layout */
+.flow-step {
+    position: relative;
+    max-width: 600px;
+    margin: 0;
+}
+
+/* Step 1 and 3: Left aligned */
+.step-1,
+.step-3 {
+    margin-left: 0;
+    margin-right: auto;
+    padding-left: 0;
+}
+
+/* Step 2 and 4: Right aligned */
+.step-2,
+.step-4 {
+    margin-left: auto;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.flow-step {
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.flow-step:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Glow line at bottom */
+.flow-step::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--accent-orange) 50%, 
+        transparent 100%
+    );
+    opacity: 0.8;
+    box-shadow: 0 -2px 10px var(--accent-orange);
+}
+
+.step-number {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    min-width: 60px;
+    flex-shrink: 0;
+}
+
+.icon-bubble {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 87, 34, 0.2), rgba(0, 0, 0, 0));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--accent-orange);
+    border: 1px solid rgba(255, 87, 34, 0.3);
+    box-shadow: inset 0 0 10px rgba(255, 87, 34, 0.1);
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.6rem;
+}
+
+.step-content p {
+    font-size: 0.95rem;
+    color: #9ca3af;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- CTA Section --- */
+.cta-section {
+    padding: 3rem 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cta-card {
+    width: 100%;
+    max-width: 900px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    border-radius: 16px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+}
+
+.cta-card h2 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.cta-card p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-primary.large {
+    background-color: white;
+    color: #ff6b35;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary.large:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .top-nav {
+        padding: 1rem 2%;
+    }
+    
+    .nav-links {
+        gap: 0.8rem;
+    }
+    
+    .nav-item {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .nav-item span {
+        display: none; /* Hide text on mobile, keep icons */
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .flow-step {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+    }
+
+    .step-1,
+    .step-2,
+    .step-3,
+    .step-4 {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+    }
+
+    .cta-card {
+        padding: 2rem;
+    }
+
+    .cta-card h2 {
+        font-size: 1.5rem;
+    }
+}
