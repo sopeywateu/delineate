@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             messageDiv.className = 'message info';
             messageDiv.classList.remove('hidden');
 
-            const response = await fetch(`/api/package/${encodeURIComponent(packageName)}/details`);
+            const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details`));
             if (!response.ok) {
                 throw new Error('Package not found or error occurred');
             }
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log(`Version changed to: ${selectedVersion}`);
 
                     try {
-                        const response = await fetch(`/api/package/${encodeURIComponent(packageNameDisplay.textContent)}/details?version=${encodeURIComponent(selectedVersion)}`);
+                        const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageNameDisplay.textContent)}/details?version=${encodeURIComponent(selectedVersion)}`));
                         if (!response.ok) {
                             throw new Error('Failed to fetch data for selected version');
                         }
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchPackageData(packageName) {
         try {
-            const response = await fetch(`/api/package/${encodeURIComponent(packageName)}/details`);
+            const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details`));
             if (!response.ok) {
                 throw new Error('Package not found or error occurred');
             }
@@ -490,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const nodeId = params.nodes[0];
 
                     try {
-                        const response = await fetch(`/api/package/${encodeURIComponent(nodeId)}/details`);
+                        const response = await fetch(getApiUrl(`/package/${encodeURIComponent(nodeId)}/details`));
                         if (!response.ok) throw new Error('Failed to fetch metadata');
 
                         const freshData = await response.json();

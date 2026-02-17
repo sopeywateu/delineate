@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.innerHTML = '<i class="ph-fill ph-spinner"></i><span>Sending...</span>';
 
         try {
-            const response = await fetch('/api/feedback', {
+            const response = await fetch(getApiUrl('/feedback'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
