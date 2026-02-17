@@ -10,12 +10,11 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://unpkg.com/vis-network@9.1.2/standalone/umd/vis-network.min.js"></script>
     <!-- API Configuration - must load before dashboard.js -->
-    <script src="front_js/config.js"></script>
-    <!-- Set custom API base for production deployments (e.g., Render backend URL) -->
     <script>
-      // If you want to override, set window.API_BASE_URL before this script loads:
-      // window.API_BASE_URL = 'https://your-render-backend.onrender.com/api';
+      // Set backend URL before config.js loads
+      window.__API_BASE__ = 'https://delineate.onrender.com/api';
     </script>
+    <script src="front_js/config.js"></script>
 </head>
 <body>
 
