@@ -11,8 +11,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // CORS configuration: prefer an explicit FRONTEND_URL environment variable in production
-const FRONTEND_URL = process.env.FRONTEND_URL || process.env.CORS_ORIGIN || null;
-const corsOptions = FRONTEND_URL ? { origin: FRONTEND_URL, optionsSuccessStatus: 200 } : {};
+// Remove trailing slash to prevent CORS mismatch
+const rawFrontendUrl = process.env.FRONTEND_URL || process.env.CORS_ORIGIN || null;
+const FRONTEND_URL = rawFrontendUrl ? rawFrontendUrl.replace(/\/$/, '') : null;
+const corsOptions = FRONTEND_URL ? { origin: FRONTEND_URL, optionsSuccessStatus: 200, credentials: true } : {};
 
 // Middleware
 app.use(cors(corsOptions));
@@ -38,7 +40,6 @@ app.get('/debug/status', async (req, res) => {
   try {
     const hasNeo4jUri = !!process.env.NEO4J_URI;
     const hasMongoUri = !!process.env.MONGO_URI;
-    const frontendUrl = process.env.FRONTEND_URL || process.env.CORS_ORIGIN || 'not set';
     
     // Try a quick Neo4j query
     let neo4jOk = false;
@@ -60,7 +61,7 @@ app.get('/debug/status', async (req, res) => {
         hasNeo4jUri,
         neo4jUriSample: hasNeo4jUri ? process.env.NEO4J_URI.substring(0, 15) + '...' : 'missing',
         hasMongoUri,
-        frontendUrl,
+        frontendUrlRaw: process.env.FRONTEND_URL || 'not set',
       },
       database: {
         neo4j: {
