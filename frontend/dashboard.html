@@ -83,6 +83,10 @@
                 <div class="view-toggle">
                     <button id="table-toggle" class="toggle-btn active">Table View</button>
                     <button id="graph-toggle" class="toggle-btn">Graph View</button>
+                    <button id="version-guide-btn" class="toggle-btn guide-btn" title="Version Specifier Guide">
+                        <i class="ph-bold ph-info"></i>
+                        <span>Version Guide</span>
+                    </button>
                 </div>
                 
                 <div id="tableView" class="view-content">
@@ -172,10 +176,58 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Version Guide Help Panel -->
+            <div id="version-guide-panel" class="version-guide-panel">
+                <div class="guide-panel-header">
+                    <h3>Version Specifier Guide</h3>
+                    <button id="close-guide-btn" class="close-guide-btn">
+                        <i class="ph-bold ph-x"></i>
+                    </button>
+                </div>
+                <div class="guide-panel-content">
+                    <div class="guide-item">
+                        <code class="specifier">=1.2.0</code>
+                        <p>version 1.2.0 or newer</p>
+                    </div>
+                    <div class="guide-item">
+                        <code class="specifier">&lt;=2.0.0</code>
+                        <p>version up to 2.0.0</p>
+                    </div>
+                    <div class="guide-item">
+                        <code class="specifier">&lt;3</code>
+                        <p>any version below 3</p>
+                    </div>
+                    <div class="guide-item">
+                        <code class="specifier">!=1.5.7</code>
+                        <p>excluded version</p>
+                    </div>
+                    <div class="guide-item">
+                        <code class="specifier">^4.17.1</code>
+                        <p>compatible major version (npm)</p>
+                    </div>
+                    <div class="guide-item">
+                        <code class="specifier">~1.15.6</code>
+                        <p>patch compatible (npm)</p>
+                    </div>
+                    <div class="guide-item">
+                        <code class="specifier">&lt;4,>=2</code>
+                        <p>allowed version range</p>
+                    </div>
+                    <div class="guide-item">
+                        <code class="specifier">—</code>
+                        <p>no strict version requirement</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Click overlay to close guide panel -->
+            <div id="guide-overlay" class="guide-overlay"></div>
         </div>
     </header>
 
     <script src="front_js/bg-animation.js"></script>
     <script src="front_js/dashboard.js"></script>
+    <script src="front_js/version-guide.js"></script>
 </body>
 </html>
