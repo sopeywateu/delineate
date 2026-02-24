@@ -158,6 +158,14 @@ function setupPackageAutocomplete() {
 
     input.addEventListener('input', fetchSuggestions);
 
+    // Reset suggestions when ecosystem changes
+    if (ecosystemSelect) {
+        ecosystemSelect.addEventListener('change', () => {
+            input.value = '';
+            hide();
+        });
+    }
+
     // Click selection
     container.addEventListener('click', (e) => {
         const it = e.target.closest('.autocomplete-item');

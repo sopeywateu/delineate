@@ -22,7 +22,7 @@ router.get('/package/:name/details', async (req, res) => {
 });
 
 // GET /api/package/search?query=...&ecosystem=...
-// Returns a short list of package names that match the query from Neo4j
+// Returns a short list of package names that match the query from Neo4j, filtered by ecosystem
 router.get('/package/search', async (req, res) => {
   try {
     const { query = '', ecosystem = 'npm' } = req.query;
@@ -30,7 +30,7 @@ router.get('/package/search', async (req, res) => {
       return res.json([]);
     }
 
-    const results = await neo4jService.searchPackages(query.trim());
+    const results = await neo4jService.searchPackages(query.trim(), ecosystem);
     // Ensure we always return an array
     res.json(Array.isArray(results) ? results : []);
   } catch (error) {
