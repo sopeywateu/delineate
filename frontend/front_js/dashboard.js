@@ -206,16 +206,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const depsTbody = document.getElementById('dependencies-tbody');
         depsTbody.innerHTML = '';
 
-        (data.dependencies || []).forEach(dep => {
-            if (dep && dep.name) {
+        const deps = (data.dependencies || []).filter(d => d && d.name);
+        if (deps.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="2" style="color: var(--text-secondary); font-style: italic; text-align: left;">This package doesn't have any dependencies.</td>`;
+            depsTbody.appendChild(row);
+        } else {
+            deps.forEach(dep => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${dep.name}</td>
                     <td>${dep.specifier || '—'}</td>
                 `;
                 depsTbody.appendChild(row);
-            }
-        });
+            });
+        }
 
         // Update dependents table
         const dependentsTbody = document.getElementById('dependents-tbody');

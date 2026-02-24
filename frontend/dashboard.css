@@ -97,6 +97,11 @@
     color: var(--text-secondary);
 }
 
+/* Hide utility for autocomplete container */
+.autocomplete-suggestions.hidden {
+    display: none;
+}
+
 .message {
     margin-top: 1rem;
     padding: 1rem;
