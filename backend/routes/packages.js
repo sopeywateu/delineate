@@ -3,13 +3,13 @@ const { getPackageData } = require('../controllers/packageController');
 
 const router = express.Router();
 
-// GET /api/package/:name/details?version=...
+// GET /api/package/:name/details?version=...&ecosystem=...
 router.get('/package/:name/details', async (req, res) => {
   try {
     const { name } = req.params;
-    const { version } = req.query; // Accept optional version parameter
+    const { version, ecosystem } = req.query; // Accept optional version and ecosystem parameters
     
-    const data = await getPackageData(name, version);
+    const data = await getPackageData(name, version, ecosystem);
     if (!data) {
       return res.status(404).json({ error: 'Package not found' });
     }

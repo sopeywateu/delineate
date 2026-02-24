@@ -84,16 +84,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    packageManagerSelect.addEventListener('change', function () {
-        if (this.value === 'pypi') {
-            messageDiv.textContent = 'PyPI support is in future enhancements. Only npm is available.';
-            messageDiv.className = 'message warning';
-            messageDiv.classList.remove('hidden');
-        } else {
-            messageDiv.classList.add('hidden');
-        }
-    });
-
     // Toggle between views
     tableToggle.addEventListener('click', function () {
         tableView.classList.remove('hidden');
@@ -116,18 +106,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const analyzeBtn = document.getElementById('analyze-btn');
     analyzeBtn.addEventListener('click', async function () {
         const packageName = document.getElementById('package-name').value.trim();
-        const manager = packageManagerSelect.value;
+        const ecosystem = packageManagerSelect.value || 'npm'; // Default to npm
 
         if (!packageName) {
             messageDiv.textContent = 'Please enter a package name.';
-            messageDiv.className = 'message warning';
-            messageDiv.classList.remove('hidden');
-            resultsDiv.classList.add('hidden');
-            return;
-        }
-
-        if (manager === 'pypi') {
-            messageDiv.textContent = 'PyPI support is in future enhancements. Only npm is available.';
             messageDiv.className = 'message warning';
             messageDiv.classList.remove('hidden');
             resultsDiv.classList.add('hidden');
@@ -140,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
             messageDiv.className = 'message info';
             messageDiv.classList.remove('hidden');
 
-            const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details`));
+            const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details?ecosystem=${encodeURIComponent(ecosystem)}`));
             if (!response.ok) {
                 throw new Error('Package not found or error occurred');
             }
@@ -198,10 +180,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Add event listener to version dropdown
                 document.getElementById('version-select').addEventListener('change', async function () {
                     const selectedVersion = this.value;
+                    const ecosystem = packageManagerSelect.value || 'npm'; // Default to npm
                     console.log(`Version changed to: ${selectedVersion}`);
 
                     try {
-                        const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageNameDisplay.textContent)}/details?version=${encodeURIComponent(selectedVersion)}`));
+                        const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageNameDisplay.textContent)}/details?version=${encodeURIComponent(selectedVersion)}&ecosystem=${encodeURIComponent(ecosystem)}`));
                         if (!response.ok) {
                             throw new Error('Failed to fetch data for selected version');
                         }
@@ -253,7 +236,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchPackageData(packageName) {
         try {
-            const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details`));
+            const ecosystem = packageManagerSelect.value || 'npm'; // Default to npm
+            const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details?ecosystem=${encodeURIComponent(ecosystem)}`));
             if (!response.ok) {
                 throw new Error('Package not found or error occurred');
             }
@@ -488,9 +472,10 @@ document.addEventListener('DOMContentLoaded', function () {
             network.on('click', async function (params) {
                 if (params.nodes.length > 0) {
                     const nodeId = params.nodes[0];
+                    const ecosystem = packageManagerSelect.value || 'npm'; // Default to npm
 
                     try {
-                        const response = await fetch(getApiUrl(`/package/${encodeURIComponent(nodeId)}/details`));
+                        const response = await fetch(getApiUrl(`/package/${encodeURIComponent(nodeId)}/details?ecosystem=${encodeURIComponent(ecosystem)}`));
                         if (!response.ok) throw new Error('Failed to fetch metadata');
 
                         const freshData = await response.json();

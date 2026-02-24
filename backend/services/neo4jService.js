@@ -27,9 +27,11 @@ class Neo4jService {
     }
   }
 
-  async getPackageAnalysis(packageName, selectedVersion = null) {
+  async getPackageAnalysis(packageName, selectedVersion = null, ecosystem = 'npm') {
     const session = getSession();
     try {
+      console.log(`Analyzing package: ${packageName}, version: ${selectedVersion || 'latest'}, ecosystem: ${ecosystem}`);
+      
       // Step 1: Get all versions
       const versionsResult = await session.run(
         'MATCH (p:Package {name: $name})-[:HAS_VERSION]->(v:Version) RETURN v.version AS version ORDER BY toInteger(split(v.version,".")[0]) DESC, toInteger(split(v.version,".")[1]) DESC, toInteger(split(v.version,".")[2]) DESC',
