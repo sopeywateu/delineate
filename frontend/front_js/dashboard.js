@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details?ecosystem=${encodeURIComponent(ecosystem)}`));
             if (!response.ok) {
-                throw new Error('Package not found or error occurred');
+                throw new Error(`Package not found in ${ecosystem}`);
             }
             const apiData = await response.json();
 
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error('Error:', error);
-            messageDiv.textContent = 'Error analyzing package. Please try again.';
+            messageDiv.textContent = error.message || `Package not found in ${ecosystem}`;
             messageDiv.className = 'message warning';
             messageDiv.classList.remove('hidden');
             resultsDiv.classList.add('hidden');
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     try {
                         const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageNameDisplay.textContent)}/details?version=${encodeURIComponent(selectedVersion)}&ecosystem=${encodeURIComponent(ecosystem)}`));
                         if (!response.ok) {
-                            throw new Error('Failed to fetch data for selected version');
+                            throw new Error(`Failed to fetch data for selected version in ${ecosystem}`);
                         }
                         const newData = await response.json();
                         currentData = newData;
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     } catch (error) {
                         console.error('Error fetching version data:', error);
-                        showMessage('Error loading selected version', 'warning');
+                        showMessage(error.message || 'Error loading selected version', 'warning');
                     }
                 });
             }
@@ -206,16 +206,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const depsTbody = document.getElementById('dependencies-tbody');
         depsTbody.innerHTML = '';
 
-        (data.dependencies || []).forEach(dep => {
-            if (dep && dep.name) {
+        const deps = (data.dependencies || []).filter(d => d && d.name);
+        if (deps.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="2" style="color: var(--text-secondary); font-style: italic; text-align: left;">This package doesn't have any dependencies.</td>`;
+            depsTbody.appendChild(row);
+        } else {
+            deps.forEach(dep => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${dep.name}</td>
                     <td>${dep.specifier || '—'}</td>
                 `;
                 depsTbody.appendChild(row);
-            }
-        });
+            });
+        }
 
         // Update dependents table
         const dependentsTbody = document.getElementById('dependents-tbody');
@@ -239,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const ecosystem = packageManagerSelect.value || 'npm'; // Default to npm
             const response = await fetch(getApiUrl(`/package/${encodeURIComponent(packageName)}/details?ecosystem=${encodeURIComponent(ecosystem)}`));
             if (!response.ok) {
-                throw new Error('Package not found or error occurred');
+                throw new Error(`Package not found in ${ecosystem}`);
             }
             const apiData = await response.json();
             currentData = apiData;
@@ -253,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
             addToHistory(packageName, apiData);
         } catch (error) {
             console.error('Error fetching package data:', error);
-            messageDiv.textContent = 'Error fetching package data. Please try again.';
+            messageDiv.textContent = error.message || `Package not found in the selected ecosystem`;
             messageDiv.className = 'message warning';
             messageDiv.classList.remove('hidden');
         }

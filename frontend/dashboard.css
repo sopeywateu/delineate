@@ -63,6 +63,45 @@
     box-shadow: 0 0 0 2px rgba(200, 59, 16, 0.3);
 }
 
+/* Autocomplete suggestions for package name input */
+.autocomplete-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: rgba(20,20,20,0.95);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 1200;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+.autocomplete-item {
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+    background: rgba(200,59,16,0.12);
+    color: white;
+}
+
+.autocomplete-empty {
+    padding: 0.6rem 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Hide utility for autocomplete container */
+.autocomplete-suggestions.hidden {
+    display: none;
+}
+
 .message {
     margin-top: 1rem;
     padding: 1rem;

@@ -1,12 +1,12 @@
 const { getSession } = require('../config/neo4j');
 
 class Neo4jService {
-  async searchPackages(query) {
+  async searchPackages(query, ecosystem = 'npm') {
     const session = getSession();
     try {
       const result = await session.run(
-        'MATCH (p:Package) WHERE toLower(p.name) CONTAINS toLower($query) RETURN p.name AS name LIMIT 10',
-        { query }
+        'MATCH (p:Package {ecosystem: $ecosystem}) WHERE toLower(p.name) CONTAINS toLower($query) RETURN p.name AS name LIMIT 10',
+        { query, ecosystem }
       );
       return result.records.map(record => record.get('name'));
     } finally {
@@ -14,12 +14,12 @@ class Neo4jService {
     }
   }
 
-  async getPackageVersions(packageName) {
+  async getPackageVersions(packageName, ecosystem = 'npm') {
     const session = getSession();
     try {
       const result = await session.run(
-        'MATCH (p:Package {name: $name})-[:HAS_VERSION]->(v:Version) RETURN v.version AS version ORDER BY v.version DESC LIMIT 3',
-        { name: packageName }
+        'MATCH (p:Package {name: $name, ecosystem: $ecosystem})-[:HAS_VERSION]->(v:Version) RETURN v.version AS version ORDER BY v.version DESC LIMIT 3',
+        { name: packageName, ecosystem }
       );
       return result.records.map(record => record.get('version'));
     } finally {
@@ -34,8 +34,8 @@ class Neo4jService {
       
       // Step 1: Get all versions
       const versionsResult = await session.run(
-        'MATCH (p:Package {name: $name})-[:HAS_VERSION]->(v:Version) RETURN v.version AS version ORDER BY toInteger(split(v.version,".")[0]) DESC, toInteger(split(v.version,".")[1]) DESC, toInteger(split(v.version,".")[2]) DESC',
-        { name: packageName }
+        'MATCH (p:Package {name: $name, ecosystem: $ecosystem})-[:HAS_VERSION]->(v:Version) RETURN v.version AS version ORDER BY toInteger(split(v.version,".")[0]) DESC, toInteger(split(v.version,".")[1]) DESC, toInteger(split(v.version,".")[2]) DESC',
+        { name: packageName, ecosystem }
       );
 
       const versions = [...new Set(
@@ -45,8 +45,8 @@ class Neo4jService {
       if (versions.length === 0) {
         // Check if package exists without versions
         const pkgCheck = await session.run(
-          'MATCH (p:Package {name: $name}) RETURN p LIMIT 1',
-          { name: packageName }
+          'MATCH (p:Package {name: $name, ecosystem: $ecosystem}) RETURN p LIMIT 1',
+          { name: packageName, ecosystem }
         );
 
         if (pkgCheck.records.length === 0) {
@@ -80,9 +80,9 @@ class Neo4jService {
 
       // Step 2: Get dependencies for the selected version (with specifier)
       const depsResult = await session.run(
-        `MATCH (p:Package {name: $name})-[:HAS_VERSION]->(v:Version {version: $version})-[r:DEPENDS_ON]->(dep:Package)
+        `MATCH (p:Package {name: $name, ecosystem: $ecosystem})-[:HAS_VERSION]->(v:Version {version: $version})-[r:DEPENDS_ON]->(dep:Package {ecosystem: $ecosystem})
          RETURN dep.name AS name, r.specifier AS specifier`,
-        { name: packageName, version: versionToUse }
+        { name: packageName, version: versionToUse, ecosystem }
       );
 
       const dependencies = depsResult.records.map(r => ({
@@ -92,9 +92,9 @@ class Neo4jService {
 
       // Step 3: Get dependents (packages that depend on this one, with all their versions)
       const dependentsResult = await session.run(
-        `MATCH (other:Package)-[:HAS_VERSION]->(ov:Version)-[r:DEPENDS_ON]->(p:Package {name: $name})
+        `MATCH (other:Package {ecosystem: $ecosystem})-[:HAS_VERSION]->(ov:Version)-[r:DEPENDS_ON]->(p:Package {name: $name, ecosystem: $ecosystem})
          RETURN other.name AS package, ov.version AS version, r.specifier AS specifier`,
-        { name: packageName }
+        { name: packageName, ecosystem }
       );
 
       const dependents = dependentsResult.records.map(r => ({
