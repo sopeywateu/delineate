@@ -1,17 +1,40 @@
+const fs = require('fs');
+const path = require('path');
 const { getSession } = require('../config/neo4j');
+
+// Load recommendation lists (newline-separated) from backend/config/recommendations/*.txt
+const recommendationsDir = path.join(__dirname, '..', 'config', 'recommendations');
+let npmRecommendations = [];
+let pypiRecommendations = [];
+try {
+  const npmPath = path.join(recommendationsDir, 'npm.txt');
+  const pypiPath = path.join(recommendationsDir, 'pypi.txt');
+  if (fs.existsSync(npmPath)) {
+    npmRecommendations = fs.readFileSync(npmPath, 'utf8').split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  }
+  if (fs.existsSync(pypiPath)) {
+    pypiRecommendations = fs.readFileSync(pypiPath, 'utf8').split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  }
+} catch (err) {
+  console.warn('Could not load recommendation lists:', err);
+}
 
 class Neo4jService {
   async searchPackages(query, ecosystem = 'npm') {
-    const session = getSession();
-    try {
-      const result = await session.run(
-        'MATCH (p:Package {ecosystem: $ecosystem}) WHERE toLower(p.name) CONTAINS toLower($query) RETURN p.name AS name LIMIT 10',
-        { query, ecosystem }
-      );
-      return result.records.map(record => record.get('name'));
-    } finally {
-      await session.close();
+    const q = (query || '').trim().toLowerCase();
+    if (!q) return [];
+    const eco = (ecosystem || 'npm').toLowerCase();
+
+    // Use only the provided recommendation lists (case-insensitive contains match)
+    if (eco === 'npm') {
+      return npmRecommendations.filter(n => n.toLowerCase().includes(q)).slice(0, 10);
     }
+    if (eco === 'pypi' || eco === 'py' || eco === 'pip') {
+      return pypiRecommendations.filter(n => n.toLowerCase().includes(q)).slice(0, 10);
+    }
+
+    // Unknown ecosystem: return empty list
+    return [];
   }
 
   async getPackageVersions(packageName, ecosystem = 'npm') {
