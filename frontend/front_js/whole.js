@@ -3,8 +3,16 @@ let cy = null;
 async function loadGraph() {
     const ecosystem = document.getElementById('ecosystemSelect').value;
 
-    // Fetch data from backend
-    const response = await fetch(`/api/ecosystem/${ecosystem}`);
+    // Fetch data from backend (use getApiUrl from config.js when available)
+    const apiEndpoint = (typeof window.getApiUrl === 'function')
+        ? window.getApiUrl(`/ecosystem/${ecosystem}`)
+        : `/api/ecosystem/${ecosystem}`;
+
+    const response = await fetch(apiEndpoint);
+    if (!response.ok) {
+        const body = await response.text();
+        throw new Error(`API error ${response.status}: ${body}`);
+    }
     const links = await response.json();
 
     // Format data for Cytoscape
