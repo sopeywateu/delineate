@@ -3,9 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const connectMongo = require('./config/mongo');
-const { driver, verifyConnectivity } = require('./config/neo4j');
+const { driver, verifyConnectivity, getSession } = require('./config/neo4j');
 const packagesRouter = require('./routes/packages');
 const feedbackRouter = require('./routes/feedback');
+const neo4jService = require('./services/neo4jService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,24 +36,21 @@ app.get('/health', (req, res) => {
 
 // Debug endpoint: Check env vars and connectivity for troubleshooting
 app.get('/debug/status', async (req, res) => {
-  const { getSession } = require('./config/neo4j');
-  
   try {
     const hasNeo4jUri = !!process.env.NEO4J_URI;
     const hasMongoUri = !!process.env.MONGO_URI;
-    
-    // Try a quick Neo4j query
+
     let neo4jOk = false;
     let neo4jError = null;
     try {
       const session = getSession();
-      await x('RETURN 1');
+      await session.run('RETURN 1');
       await session.close();
       neo4jOk = true;
     } catch (err) {
-      neo4jError = err.message;
+      neo4jError = err.message || String(err);
     }
-    
+
     res.json({
       timestamp: new Date().toISOString(),
       environment: {
@@ -75,10 +73,18 @@ app.get('/debug/status', async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
-      error: 'Failed to get status',
-      message: error.message,
-    });
+    res.status(500).json({ error: 'Failed to get status', message: error.message });
+  }
+});
+
+// Register ecosystem route (used by the frontend explorer)
+app.get('/api/ecosystem/:name', async (req, res) => {
+  try {
+    const data = await neo4jService.getEcosystemGraph(req.params.name);
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching ecosystem graph:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 
