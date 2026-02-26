@@ -8,6 +8,7 @@ const GraphView = ({ initialPackage = 'react' }) => {
   const [centerNode, setCenterNode] = useState(initialPackage);
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const [selectedNode, setSelectedNode] = useState(null);
+  const [hoveredNode, setHoveredNode] = useState(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const fgRef = useRef();
 
@@ -70,7 +71,15 @@ const GraphView = ({ initialPackage = 'react' }) => {
           ref={fgRef}
           graphData={graphData}
           nodeLabel="name"
-          nodeColor={(node) => node.isCenter ? '#c83b10' : '#00E5FF'}
+          nodeColor={(node) => {
+            if (selectedNode && node.id === selectedNode.id) {
+              return '#1f2937'; // Dark gray-blue for selected
+            }
+            if (hoveredNode && node.id === hoveredNode.id) {
+              return '#1f2937'; // Dark gray-blue for hovered
+            }
+            return node.isCenter ? '#c83b10' : '#00E5FF';
+          }}
           nodeRelSize={12}
           linkDirectionalArrowLength={6}
           linkDirectionalArrowRelPos={1}
@@ -80,6 +89,7 @@ const GraphView = ({ initialPackage = 'react' }) => {
             simulation.force('link').distance(150);
           }}
           onNodeClick={handleNodeClick}
+          onNodeHover={(node) => setHoveredNode(node)}
           width={800}
           height={600}
         />
