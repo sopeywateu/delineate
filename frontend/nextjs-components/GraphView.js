@@ -8,6 +8,7 @@ const GraphView = ({ initialPackage = 'react' }) => {
   const [centerNode, setCenterNode] = useState(initialPackage);
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const [selectedNode, setSelectedNode] = useState(null);
+  const [hoveredNode, setHoveredNode] = useState(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const fgRef = useRef();
 
@@ -63,14 +64,32 @@ const GraphView = ({ initialPackage = 'react' }) => {
     setSelectedNode(null);
   };
 
+  const handleNodeCanvasObject = (node, ctx, globalScale) => {
+    const label = node.name;
+    const fontSize = 12 / globalScale;
+    ctx.font = `${fontSize}px Sans-Serif`;
+    const textWidth = ctx.measureText(label).width;
+    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+
+    // Check if node is hovered or selected
+    const isInteracting = (hoveredNode && hoveredNode.id === node.id) || 
+                         (selectedNode && selectedNode.id === node.id);
+    
+    // Set text color: black when hovered/selected, white otherwise
+    ctx.fillStyle = isInteracting ? '#000000' : '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, node.x, node.y);
+  };
+
   return (
     <div className="graph-view-container">
       <div className="graph-container">
         <ForceGraph2D
           ref={fgRef}
           graphData={graphData}
-          nodeLabel="name"
           nodeColor={(node) => node.isCenter ? '#c83b10' : '#00E5FF'}
+          nodeCanvasObject={handleNodeCanvasObject}
           nodeRelSize={12}
           linkDirectionalArrowLength={6}
           linkDirectionalArrowRelPos={1}
@@ -80,6 +99,7 @@ const GraphView = ({ initialPackage = 'react' }) => {
             simulation.force('link').distance(150);
           }}
           onNodeClick={handleNodeClick}
+          onNodeHover={(node) => setHoveredNode(node)}
           width={800}
           height={600}
         />
