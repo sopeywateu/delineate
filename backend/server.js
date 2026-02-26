@@ -46,7 +46,7 @@ app.get('/debug/status', async (req, res) => {
     let neo4jError = null;
     try {
       const session = getSession();
-      await session.run('RETURN 1');
+      await x('RETURN 1');
       await session.close();
       neo4jOk = true;
     } catch (err) {
@@ -101,5 +101,15 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
+//for whole graph
+app.get('/api/ecosystem/:name', async (req, res) => {
+  try {
+    const data = await neo4jService.getEcosystemGraph(req.params.name);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 startServer();

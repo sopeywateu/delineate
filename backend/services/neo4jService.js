@@ -198,6 +198,42 @@ class Neo4jService {
       await session.close();
     }
   }
+  //for whole graph
+  async getEcosystemGraph(ecosystem) {
+  const session = getSession();
+  try {
+    const result = await session.run(
+      `// Step 1: Find the Top 30 'Hub' packages (highest in-degree)
+       MATCH (target:Package {ecosystem: $ecosystem})
+       MATCH ()-[:HAS_VERSION]->()-[r:DEPENDS_ON]->(target)
+       WITH target, count(r) AS inDegree
+       ORDER BY inDegree DESC
+       LIMIT 30
+       
+       // Step 2: Collect them into a list
+       WITH collect(target) AS hubs
+       
+       // Step 3: Find all relationships connected to these hubs
+       MATCH (p:Package {ecosystem: $ecosystem})-[:HAS_VERSION]->(v:Version)-[rel:DEPENDS_ON]->(dep:Package {ecosystem: $ecosystem})
+       WHERE p IN hubs OR dep IN hubs
+       
+       RETURN p.name AS source, dep.name AS target, rel.specifier AS specifier
+       LIMIT 300`, // Cap at 300 edges to keep the UI smooth
+      { ecosystem }
+    );
+    
+    return result.records.map(record => ({
+      source: record.get('source'),
+      target: record.get('target'),
+      specifier: record.get('specifier') || '—'
+    }));
+  } finally {
+    await session.close();
+  }
 }
+}
+
+
+
 
 module.exports = new Neo4jService();
