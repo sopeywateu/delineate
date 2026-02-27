@@ -2,9 +2,10 @@ let cy = null;
 
 async function loadGraph() {
     const ecosystem = document.getElementById('ecosystemSelect').value;
+    const BACKEND_URL = 'https://delineate.onrender.com';
 
     // Fetch data from backend
-    const response = await fetch(`/api/ecosystem/${ecosystem}`);
+    const response = await fetch(`${BACKEND_URL}/api/ecosystem/${ecosystem}`);
     const links = await response.json();
 
     // Format data for Cytoscape
