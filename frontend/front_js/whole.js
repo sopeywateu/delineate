@@ -141,11 +141,31 @@ async function loadGraph() {
     });
 
     // Add click event to show specifier
+    // Show notification when clicking an edge
     cy.on('tap', 'edge', function (evt) {
         let edge = evt.target;
-        alert(`Dependency Constraint:\n${edge.data('source')} requires ${edge.data('target')} (${edge.data('specifier')})`);
+        const msg = `${edge.data('source')} requires ${edge.data('target')} (${edge.data('specifier')})`;
+        
+        // Update text and slide in
+        document.getElementById('edge-notification-text').innerText = msg;
+        document.getElementById('edge-notification').classList.add('show');
+    });
+
+    // Hide notification when clicking empty canvas space or a node
+    cy.on('tap', function(evt) {
+        if (evt.target === cy || evt.target.isNode()) {
+            document.getElementById('edge-notification').classList.remove('show');
+        }
     });
 }
+// Hide notification when clicking outside the graph (like the nav bar or controls)
+document.addEventListener('click', function(e) {
+    const notif = document.getElementById('edge-notification');
+    // If the click is NOT on the canvas (Cytoscape) and the notification is showing
+    if (e.target.tagName !== 'CANVAS' && notif.classList.contains('show')) {
+        notif.classList.remove('show');
+    }
+});
 
 // Load initially
 window.onload = loadGraph;

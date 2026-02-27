@@ -117,3 +117,39 @@ body {
 #controls button:active {
     transform: translateY(0);
 }
+
+/* Custom Slide-in Notification */
+.custom-notification {
+    position: fixed;
+    bottom: 30px;
+    right: -400px; /* Start hidden off-screen to the right */
+    width: 320px;
+    background-color: #222; /* Dark background */
+    color: #fff;
+    padding: 16px;
+    border-left: 5px solid #e65100; /* Warm orange accent */
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy slide-in */
+    z-index: 1000;
+    font-family: 'Outfit', sans-serif;
+    pointer-events: none; /* Let clicks pass through if needed */
+}
+
+/* Class added via JS to trigger the slide in */
+.custom-notification.show {
+    right: 30px; 
+}
+
+.notification-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffb300; /* Amber title */
+    margin-bottom: 6px;
+}
+
+.notification-body {
+    font-size: 15px;
+    color: #e0e0e0;
+    line-height: 1.4;
+}
