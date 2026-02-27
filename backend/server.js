@@ -108,14 +108,4 @@ const startServer = async () => {
   }
 };
 
-//for whole graph
-app.get('/api/ecosystem/:name', async (req, res) => {
-  try {
-    const data = await neo4jService.getEcosystemGraph(req.params.name);
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 startServer();
