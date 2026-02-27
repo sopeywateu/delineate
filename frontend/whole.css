@@ -22,7 +22,7 @@ body {
     left: 0;
     z-index: 1;
     /* Adds a subtle radial glow behind the graph */
-    background: radial-gradient(circle at center, #1f2833 0%, #0b0c10 70%);
+    background: radial-gradient(circle at center, #501409 0%, #0b0c10 70%);
 }
 
 /* --- The Floating Control Panel --- */
@@ -54,7 +54,7 @@ body {
     font-size: 1.2rem;
     letter-spacing: 0.5px;
     /* Your text-gradient style */
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    background: linear-gradient(90deg, #ba5316 0%, #aa480f 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -85,19 +85,19 @@ body {
 }
 
 #ecosystemSelect:focus {
-    border-color: #4facfe;
+    border-color: #5e0a0a;
     box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2);
 }
 
 #ecosystemSelect option {
-    background-color: #1a1a2e; /* Dark background for dropdown options */
+    background-color: #5d2d0b; /* Dark background for dropdown options */
     color: white;
 }
 
 /* --- The Button (Mimicking your btn-primary) --- */
 #controls button {
     font-family: 'Outfit', sans-serif;
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    background: linear-gradient(90deg, #9a5308 0%, #993a06 100%);
     color: #ffffff;
     border: none;
     padding: 12px 24px;
@@ -106,12 +106,12 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+    box-shadow: 0 4px 15px rgba(191, 132, 6, 0.3);
 }
 
 #controls button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+    box-shadow: 0 6px 20px rgba(140, 7, 7, 0.5);
 }
 
 #controls button:active {
