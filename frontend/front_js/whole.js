@@ -167,5 +167,82 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// Function to find and focus on a specific node
+function searchNode() {
+    if (!cy) return; // Do nothing if the graph hasn't been generated yet
+
+    const searchTerm = document.getElementById('nodeSearch').value.trim().toLowerCase();
+    
+    if (!searchTerm) {
+        resetSearch();
+        return;
+    }
+
+    // Find nodes where the label contains the search term (case-insensitive)
+    const matchedNodes = cy.nodes(`[label @*= "${searchTerm}"]`);
+
+    if (matchedNodes.length > 0) {
+        // 1. Dim all nodes and edges in the graph
+        cy.nodes().style({ 'opacity': 0.1, 'border-width': 0 });
+        cy.edges().style({ 'opacity': 0.05 });
+
+        // 2. Highlight the matched node(s)
+        matchedNodes.style({
+            'opacity': 1,
+            'border-width': 4,
+            'border-color': '#ffffff' // White border makes it stand out
+        });
+
+        // 3. Highlight its immediate neighbors and the edges connecting them
+        const neighborhood = matchedNodes.neighborhood();
+        neighborhood.style({ 'opacity': 0.9 });
+        
+        // 4. Animate camera to zoom in on the node and its neighbors
+        cy.animate({
+            fit: {
+                eles: matchedNodes.union(neighborhood),
+                padding: 50 // Keep some breathing room around the edges
+            },
+            duration: 750, // 750ms animation
+            easing: 'ease-in-out'
+        });
+    } else {
+        alert(`Package "${searchTerm}" was not found in the current graph view.`);
+    }
+}
+
+// Function to reset the graph visual state
+function resetSearch() {
+    if (!cy) return;
+    
+    // Clear the input field
+    document.getElementById('nodeSearch').value = '';
+
+    // Restore original opacities and remove borders
+    cy.nodes().style({ 'opacity': 1, 'border-width': 0 });
+    cy.edges().style({ 'opacity': 1 });
+
+    // Zoom back out to fit the whole graph
+    cy.animate({
+        fit: {
+            padding: 50
+        },
+        duration: 750,
+        easing: 'ease-in-out'
+    });
+}
+
+// Optional: Trigger search when the user presses "Enter" in the input field
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('nodeSearch');
+    if(searchInput) {
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchNode();
+            }
+        });
+    }
+});
+
 // Load initially
 window.onload = loadGraph;
